@@ -87,12 +87,12 @@ class Sortie
         return $this;
     }
 
-    public function getDuree(): ?\DateInterval
+    public function getDuree(): ?int
     {
         return $this->duree;
     }
 
-    public function setDuree(\DateInterval $duree): static
+    public function setDuree(int $duree): static
     {
         $this->duree = $duree;
 
