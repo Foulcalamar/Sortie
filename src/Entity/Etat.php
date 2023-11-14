@@ -7,8 +7,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: EtatRepository::class)]
+#[UniqueEntity(fields: ['libelle'])]
 class Etat
 {
     #[ORM\Id]
@@ -16,8 +18,8 @@ class Etat
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::SIMPLE_ARRAY)]
-    private array $libelle = ['Créée', 'Ouverte', 'Clôturée', 'Activité en cours', 'Passée', 'Annulée'];
+    #[ORM\Column (length: 180, unique: true)]
+    private string $libelle;
 
     #[ORM\OneToMany(mappedBy: 'etat', targetEntity: Sortie::class)]
     private Collection $sorties;
