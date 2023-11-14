@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SortieRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -31,6 +33,30 @@ class Sortie
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $infosSortie = null;
+
+    #[ORM\ManyToOne(inversedBy: 'sorties')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Lieu $lieu = null;
+
+    #[ORM\ManyToOne(inversedBy: 'sorties')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Etat $etat = null;
+
+    #[ORM\ManyToOne(inversedBy: 'sorties')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Campus $campus = null;
+
+    #[ORM\ManyToOne(inversedBy: 'sortiesOrganisee')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Participant $participantOrganisateur = null;
+
+    #[ORM\ManyToMany(targetEntity: Participant::class, mappedBy: 'sortiesInscrites')]
+    private Collection $participantsInscrits;
+
+    public function __construct()
+    {
+        $this->participantsInscrits = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -105,6 +131,81 @@ class Sortie
     public function setInfosSortie(string $infosSortie): static
     {
         $this->infosSortie = $infosSortie;
+
+        return $this;
+    }
+
+    public function getLieu(): ?Lieu
+    {
+        return $this->lieu;
+    }
+
+    public function setLieu(?Lieu $lieu): static
+    {
+        $this->lieu = $lieu;
+
+        return $this;
+    }
+
+    public function getEtat(): ?Etat
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(?Etat $etat): static
+    {
+        $this->etat = $etat;
+
+        return $this;
+    }
+
+    public function getCampus(): ?Campus
+    {
+        return $this->campus;
+    }
+
+    public function setCampus(?Campus $campus): static
+    {
+        $this->campus = $campus;
+
+        return $this;
+    }
+
+    public function getParticipantOrganisateur(): ?Participant
+    {
+        return $this->participantOrganisateur;
+    }
+
+    public function setParticipantOrganisateur(?Participant $participantOrganisateur): static
+    {
+        $this->participantOrganisateur = $participantOrganisateur;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Participant>
+     */
+    public function getParticipantsInscrits(): Collection
+    {
+        return $this->participantsInscrits;
+    }
+
+    public function addParticipantsInscrit(Participant $participantsInscrit): static
+    {
+        if (!$this->participantsInscrits->contains($participantsInscrit)) {
+            $this->participantsInscrits->add($participantsInscrit);
+            $participantsInscrit->addSortiesInscrit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParticipantsInscrit(Participant $participantsInscrit): static
+    {
+        if ($this->participantsInscrits->removeElement($participantsInscrit)) {
+            $participantsInscrit->removeSortiesInscrit($this);
+        }
 
         return $this;
     }
