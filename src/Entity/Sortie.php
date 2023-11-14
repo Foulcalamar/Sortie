@@ -23,7 +23,7 @@ class Sortie
     private ?\DateTimeInterface $dateHeureDebut = null;
 
     #[ORM\Column]
-    private ?\DateInterval $duree = null;
+    private ?int $duree = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dateLimiteInscription = null;
@@ -87,12 +87,12 @@ class Sortie
         return $this;
     }
 
-    public function getDuree(): ?\DateInterval
+    public function getDuree(): ?int
     {
         return $this->duree;
     }
 
-    public function setDuree(\DateInterval $duree): static
+    public function setDuree(int $duree): static
     {
         $this->duree = $duree;
 
