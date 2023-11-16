@@ -7,6 +7,14 @@
     <div>Telephone : {{ participant.telephone }}</div>
     <div>Email : {{ participant.email }}</div>
     <div>Campus : {{ participant.campus }}</div>
+
+    <a href="{{ path('app_main') }}" class="btn btn-primary">
+        Retour
+    </a>
+
+    <a href="{{ path('app_participant_edit') }}" class="btn btn-primary">
+        Modifier
+    </a>
 {% endblock %}
 
 {% block title %}

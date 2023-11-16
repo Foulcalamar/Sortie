@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/participant', name: 'app_participant')]
 class ParticipantController extends AbstractController
 {
-    #[Route('/profile/{id}', name: '_profile')]
+    #[Route('/profile/{id<\d+>}', name: '_profile')]
     public function profile(int $id, ParticipantRepository $participantRepository, Security $security): Response
     {
         $participant = $participantRepository->find($id);
@@ -31,4 +31,16 @@ class ParticipantController extends AbstractController
             ]);
         }
     }
+
+    #[Route('/profile/edit', name: '_edit')]
+    public function editProfile(): Response
+    {
+        // Logic to edit profile
+        // Fetch participant data or perform necessary operations
+
+        return $this->render('participant/editprofile.html.twig', [
+            // Pass any necessary data to the view
+        ]);
+    }
 }
+
