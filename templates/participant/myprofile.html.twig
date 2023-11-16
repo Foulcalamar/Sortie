@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2>My Profile</h2>
+    <div>Prenom : {{ participant.prenom }}</div>
+    <div>Nom : {{ participant.nom }}</div>
+    <div>Telephone : {{ participant.telephone }}</div>
+    <div>Email : {{ participant.email }}</div>
+    <div>Campus : {{ participant.campus }}</div>
+
+    <a href="{{ path('app_main') }}" class="btn btn-primary">
+        Retour
+    </a>
+
+    <a href="{{ path('app_participant_edit') }}" class="btn btn-primary">
+        Modifier
+    </a>
+{% endblock %}
+
+{% block title %}
+    My Profile
+{% endblock %}
+
