@@ -2,10 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\Participant;
+use App\Form\UpdateUserFormType;
 use App\Repository\ParticipantRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/participant', name: 'app_participant')]
@@ -32,15 +37,30 @@ class ParticipantController extends AbstractController
         }
     }
 
-    #[Route('/profile/edit', name: '_edit')]
-    public function editProfile(): Response
+    #[Route('/edit/{id<\d+>}', name: '_edit')]
+    public function edit(int $id, Request $request, ParticipantRepository $participantRepository, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
-        // Logic to edit profile
-        // Fetch participant data or perform necessary operations
+        $user = $participantRepository->find($id);
+        $form = $this->createForm(UpdateUserFormType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // encode the plain password
+            $user->setMotPasse(
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    $form->get('plainPassword')->getData()
+                )
+            );
+
+            $entityManager->flush();
+            // do anything else you need here, like send an email
+
+            return $this->redirectToRoute('app_participant_profile', ['id' => $id]); // Redirect to profile page after editing
+        }
 
         return $this->render('participant/editprofile.html.twig', [
-            // Pass any necessary data to the view
+            'updateUserForm' => $form->createView(),
         ]);
     }
 }
-
