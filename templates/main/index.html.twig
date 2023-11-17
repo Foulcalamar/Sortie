@@ -1,20 +1,53 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello MainController!{% endblock %}
+{% block title %}Accueil{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/wamp64/www/Sortie/src/Controller/MainController.php'|file_link(0) }}">src/Controller/MainController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/wamp64/www/Sortie/templates/main/index.html.twig'|file_link(0) }}">templates/main/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <table style="border-collapse: collapse; border: 1px solid black;">
+        <thead>
+        <tr>
+            <th>Nom de la sortie</th>
+            <th>Date de la sortie</th>
+            <th>Cloture</th>
+            <th>Inscrit/Places</th>
+            <th>Etat</th>
+            <th>Inscrit</th>
+            <th>Organisateur</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for sortie in sorties %}
+            <tr>
+                <td>{{ sortie.nom }}</td>
+                <td>{{ sortie.dateHeureDebut | date('Y-m-d H:i') }}</td>
+                <td>{{ sortie.dateLimiteInscription | date('Y-m-d') }}</td>
+                <td>{{ sortie.participantsInscrits|length }}/{{ sortie.nbInscriptionsMax }}</td>
+                <td>{{ sortie.etat.libelle }}</td>
+                <td>
+                    {% set userIsParticipant = false %}
+                    {% for participant in sortie.participantsInscrits %}
+                        {% if participant.id == user %}
+                            {% set userIsParticipant = true %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if userIsParticipant %}
+                        X
+                    {% endif %}
+                </td>
+                <td>
+                    {% if user == sortie.participantOrganisateur.id %}
+                        <a href="{{ path('app_participant_profile', {'id': user}) }}">{{ sortie.participantOrganisateur.pseudo }}</a>
+                    {% else %}
+                        {{ sortie.participantOrganisateur.nom }}. {{ sortie.participantOrganisateur.prenom|slice(0,1) }}
+                    {% endif %}
+                </td>
+                <td>
+                    SORTIE NECESSAIRE
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
+
