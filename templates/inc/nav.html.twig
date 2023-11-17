@@ -4,12 +4,15 @@
 
         {% if app.user %}
 
-            <li><a href="{{ path('app_participant_profile', {'id': app.user.id }) }}" title="Profile">My Profile ({{ app.user.prenom }})</a></li>
+            <li><a href="{{ path('app_participant_profile', {'id': app.user.id }) }}" title="Profile">My Profile
+                    ({{ app.user.prenom }})</a></li>
+            {% if is_granted('ROLE_ADMIN') %}
+                <li><a href="{{ path('app_register') }}" title="Create account">Create account</a></li>
+            {% endif %}
             <li><a href="{{ path('app_logout') }}" title="Logout">Logout</a></li>
 
         {% else %}
 
-            <li><a href="{{ path('app_register') }}" title="Create account">Create account</a></li>
             <li><a href="{{ path('app_login') }}" title="Login">Login</a></li>
 
         {% endif %}
