@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Create Sortie
+{% endblock %}
+
+{% block body %}
+    <form action="{{ path('app_sortie_create') }}" method="post">
+        <select id="villeSelect" name="selectedVille">
+            <option value="">Select Ville</option>
+            {% for v in ville %}
+                <option value="{{ v.id }}">{{ v.nom }}</option>
+            {% endfor %}
+        </select>
+
+        <select id="lieuSelect" name="selectedLieu">
+            <option value="">Select Lieu</option>
+        </select>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        document.getElementById('villeSelect').addEventListener('change', function() {
+            var selectedVilleId = this.value;
+            var lieuSelect = document.getElementById('lieuSelect');
+
+            // Clear previous options
+            lieuSelect.innerHTML = '<option value="">Select Lieu</option>';
+
+            // Filter and append relevant Lieu options based on the selected Ville
+            {% for l in lieu %}
+            if ('{{ l.ville.id }}' === selectedVilleId) {
+                var option = document.createElement('option');
+                option.value = '{{ l.id }}';
+                option.text = '{{ l.nom }}';
+                lieuSelect.appendChild(option);
+            }
+            {% endfor %}
+        });
+    </script>
+{% endblock %}
