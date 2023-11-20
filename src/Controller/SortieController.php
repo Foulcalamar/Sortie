@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 use App\Repository\LieuRepository;
+use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
 use App\Repository\VilleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,13 +16,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class SortieController extends AbstractController
 {
     #[Route('/details/{id<\d+>}', name: '_details')]
-    public function sortie(int $id, SortieRepository $sortieRepository, Security $security): Response
+    public function sortie(int $id, ParticipantRepository $participantRepository, SortieRepository $sortieRepository, Security $security): Response
     {
         $sortie = $sortieRepository->find($id);
-
-        return $this->render('sortie/details.html.twig', [
-            "sortie" => $sortie
-        ]);
+        $participantSortie = $participantRepository->findAll();
+            return $this->render('sortie/details.html.twig', [
+                "sortie" => $sortie,
+                "participant" =>$participantSortie
+            ]);
     }
 
     #[Route('/create', name: '_create')]
@@ -34,4 +36,5 @@ class SortieController extends AbstractController
             "lieu" => $lieu
         ]);
     }
+
 }
