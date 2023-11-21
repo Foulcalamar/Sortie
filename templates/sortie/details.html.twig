@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2>Afficher une sortie</h2>
+    <div>Nom de la sortie: {{ sortie.nom }}</div>
+    <div>date et heure de debut : {{ sortie.dateHeureDebut | date('Y-m-d H:i' ) }}</div>
+    <div>date limite inscription : {{ sortie.dateLimiteInscription | date('Y-m-d')}}</div>
+    <div>nombre de place : {{ sortie.participantsInscrits|length }}/{{ sortie.nbInscriptionsMax }}</div>
+    <div>duree : {{ sortie.duree }} minutes</div>
+    <div>Description et info : {{ sortie.infosSortie }}</div>
+    <div>campus : {{ sortie.campus.nom }}</div>
+    <div>rue : {{ sortie.lieu.rue }}</div>
+    <div>code postal : {{ sortie.lieu.ville.codePostal }}</div>
+    <div>latitude : {{ sortie.lieu.latitude }}</div>
+    <div>longitude : {{ sortie.lieu.longitude }}</div>
+
+    <div>Liste des participants inscrits:</div>
+    <table style="border-collapse: collapse; border: 1px solid black;">
+        <thead>
+        <tr>
+            <th>Pseudo</th>
+            <th>Nom</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for participant in sortie.participantsInscrits %}
+            <tr>
+                <td>{{ participant.pseudo }}</td>
+                <td>{{ participant.prenom }} {{ participant.nom|upper }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+
+
+{% block title %}
+    Sortie Details
+{% endblock %}
+

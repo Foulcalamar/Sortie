@@ -25,29 +25,32 @@
                 <td>{{ sortie.participantsInscrits|length }}/{{ sortie.nbInscriptionsMax }}</td>
                 <td>{{ sortie.etat.libelle }}</td>
                 <td>
-                    {% set userIsParticipant = false %}
-                    {% for participant in sortie.participantsInscrits %}
-                        {% if participant.id == user %}
-                            {% set userIsParticipant = true %}
-                        {% endif %}
-                    {% endfor %}
-                    {% if userIsParticipant %}
-                        X
-                    {% endif %}
+                    {{ app.user in sortie.participantsInscrits ? "X" : "" }}
                 </td>
                 <td>
-                    {% if user == sortie.participantOrganisateur.id %}
-                        <a href="{{ path('app_participant_profile', {'id': user}) }}">{{ sortie.participantOrganisateur.pseudo }}</a>
+                    {% if app.user == sortie.participantOrganisateur %}
+                        <a href="{{ path('app_participant_profile', {'id': app.user.id}) }}">{{ sortie.participantOrganisateur.pseudo }}</a>
                     {% else %}
                         {{ sortie.participantOrganisateur.nom }}. {{ sortie.participantOrganisateur.prenom|slice(0,1) }}
                     {% endif %}
                 </td>
                 <td>
-                    SORTIE NECESSAIRE
+                    {% if app.user.userIdentifier in sortie.participantOrganisateur.userIdentifier and sortie.etat.id == 29 %}
+                        <a href="{{ path('app_sortie_details', {'id': sortie.id}) }}">Modifier</a> | <a href="">Publier</a>
+                    {% elseif app.user.userIdentifier in sortie.participantOrganisateur.userIdentifier %}
+                        <a href="{{ path('app_sortie_details', {'id': sortie.id}) }}">Afficher</a> | <a href="">Se d'esister</a>
+                    {% elseif app.user in sortie.participantsInscrits %}
+                        <a href="{{ path('app_sortie_details', {'id': sortie.id}) }}">Afficher</a> | <a href="">Se d'esister</a>
+                    {% else %}
+                        Afficher
+                    {% endif %}
+
+                    {% if app.user not in sortie.participantsInscrits and sortie.etat.id == 31%}
+                        <a href="#">| S'inscirire</a>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 {% endblock %}
-
