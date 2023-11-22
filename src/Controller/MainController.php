@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Etat;
+use App\Entity\Participant;
+use App\Entity\Sortie;
 use App\Repository\EtatRepository;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,10 +27,11 @@ class MainController extends AbstractController
         $clotureEtat = $etatRepository->find(32);
         $draftEtat = $etatRepository->find(29);
         $fermerEtat = $etatRepository->find(30);
+        $annuleEtat = $etatRepository->find(35);
         $sortiesToUpdate = $sortieRepository->findAll();
 
         foreach ($sortiesToUpdate as $sortie) {
-            $this->updateSortieEtat($sortie, $security, $currentTime, $enCoursEtat, $passeeEtat, $ouvertEtat, $clotureEtat, $draftEtat, $fermerEtat);
+            $this->updateSortieEtat($sortie, $security, $currentTime, $enCoursEtat, $passeeEtat, $ouvertEtat, $clotureEtat, $draftEtat, $fermerEtat, $annuleEtat);
         }
 
         $entityManager->flush();
@@ -40,7 +43,7 @@ class MainController extends AbstractController
         ]);
     }
 
-    private function updateSortieEtat($sortie, $security, \DateTime $currentTime, ?Etat $enCoursEtat, ?Etat $passeeEtat, ?Etat $ouvertEtat, ?Etat $clotureEtat, ?Etat $draftEtat, ?Etat $fermerEtat): void
+    private function updateSortieEtat($sortie, $security, \DateTime $currentTime, ?Etat $enCoursEtat, ?Etat $passeeEtat, ?Etat $ouvertEtat, ?Etat $clotureEtat, ?Etat $draftEtat, ?Etat $fermerEtat, ?Etat $annuleEtat): void
     {
         $loggedInUser = $security->getUser();
         $loggedInUserId = ($loggedInUser !== null) ? $loggedInUser->getUserIdentifier() : null;
@@ -56,7 +59,9 @@ class MainController extends AbstractController
 
         if ( $currentEtat == $draftEtat){
             $sortie->setEtat($draftEtat);
-        } elseif ($dateHeureDebut < $currentTime and  $currentTime < $dateFermeInscription) {
+        } elseif ( $currentEtat == $annuleEtat){
+            $sortie->setEtat($annuleEtat);
+        }elseif ($dateHeureDebut < $currentTime and  $currentTime < $dateFermeInscription) {
             $sortie->setEtat($fermerEtat);
         } elseif ($dateHeureFin < $currentTime) {
             $sortie->setEtat($passeeEtat);
@@ -71,6 +76,10 @@ class MainController extends AbstractController
         //} elseif ($dateHeureDebut > $currentTime and $loggedInUser == $organiseur) {
 
     }
+
+
+
+
 
 
 

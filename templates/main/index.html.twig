@@ -18,39 +18,47 @@
         </thead>
         <tbody>
         {% for sortie in sorties %}
-            <tr>
-                <td>{{ sortie.nom }}</td>
-                <td>{{ sortie.dateHeureDebut | date('Y-m-d H:i') }}</td>
-                <td>{{ sortie.dateLimiteInscription | date('Y-m-d') }}</td>
-                <td>{{ sortie.participantsInscrits|length }}/{{ sortie.nbInscriptionsMax }}</td>
-                <td>{{ sortie.etat.libelle }}</td>
-                <td>
-                    {{ app.user in sortie.participantsInscrits ? "X" : "" }}
-                </td>
-                <td>
-                    {% if app.user == sortie.participantOrganisateur %}
-                        <a href="{{ path('app_participant_profile', {'id': app.user.id}) }}">{{ sortie.participantOrganisateur.pseudo }}</a>
-                    {% else %}
-                        {{ sortie.participantOrganisateur.nom }}. {{ sortie.participantOrganisateur.prenom|slice(0,1) }}
-                    {% endif %}
-                </td>
-                <td>
-                    {% if app.user.userIdentifier in sortie.participantOrganisateur.userIdentifier and sortie.etat.id == 29 %}
-                        <a href="{{ path('app_sortie_details', {'id': sortie.id}) }}">Modifier</a> | <a href="">Publier</a>
-                    {% elseif app.user.userIdentifier in sortie.participantOrganisateur.userIdentifier %}
-                        <a href="{{ path('app_sortie_details', {'id': sortie.id}) }}">Afficher</a> | <a href="">Se d'esister</a>
-                    {% elseif app.user in sortie.participantsInscrits %}
-                        <a href="{{ path('app_sortie_details', {'id': sortie.id}) }}">Afficher</a> | <a href="">Se d'esister</a>
-                    {% else %}
-                        Afficher
-                    {% endif %}
+            {% if sortie.etat.id == 29 and app.user.userIdentifier != sortie.participantOrganisateur.userIdentifier %}
+                <tr>
 
-                    {% if app.user not in sortie.participantsInscrits and sortie.etat.id == 31%}
-                        <a href="#">| S'inscirire</a>
-                    {% endif %}
-                </td>
-            </tr>
+                </tr>
+            {% else %}
+                <tr>
+                    <td>{{ sortie.nom }}</td>
+                    <td>{{ sortie.dateHeureDebut | date('Y-m-d H:i') }}</td>
+                    <td>{{ sortie.dateLimiteInscription | date('Y-m-d') }}</td>
+                    <td>{{ sortie.participantsInscrits|length }}/{{ sortie.nbInscriptionsMax }}</td>
+                    <td>{{ sortie.etat.libelle }}</td>
+                    <td>
+                        {{ app.user in sortie.participantsInscrits ? "X" : "" }}
+                    </td>
+                    <td>
+                        {% if app.user == sortie.participantOrganisateur %}
+                            <a href="{{ path('app_participant_profile', {'id': app.user.id}) }}">{{ sortie.participantOrganisateur.pseudo }}</a>
+                        {% else %}
+                            {{ sortie.participantOrganisateur.nom }}. {{ sortie.participantOrganisateur.prenom|slice(0,1) }}
+                        {% endif %}
+                    </td>
+                    <td>{% if sortie.etat.id == 35 %}
+                            Sortie Annuler
+                        {% elseif app.user.userIdentifier in sortie.participantOrganisateur.userIdentifier and sortie.etat.id == 29 %}
+                            <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}">Modifier</a> | Publier
+                        {% elseif app.user in sortie.participantsInscrits %}
+                            <a href="{{ path('app_sortie_details', {'id': sortie.id}) }}">Afficher</a> | <a href="{{ path('app_sortie_desist', {'id': sortie.id}) }}">Se d'esister</a>
+                        {% elseif app.user.userIdentifier in sortie.participantOrganisateur.userIdentifier %}
+                            <a href="{{ path('app_sortie_details', {'id': sortie.id}) }}">Afficher</a>
+                        {% else %}
+                            Afficher
+                        {% endif %}
+
+                        {% if app.user not in sortie.participantsInscrits and sortie.etat.id == 31%}
+                            <a href="{{ path('app_sortie_inscrit', {'id': sortie.id}) }}">| S'inscrire</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endif %}
         {% endfor %}
         </tbody>
     </table>
 {% endblock %}
+
