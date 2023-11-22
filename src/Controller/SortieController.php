@@ -2,12 +2,17 @@
 
 namespace App\Controller;
 
+use App\Entity\Etat;
+use App\Entity\Lieu;
+use App\Entity\Sortie;
 use App\Form\SortieCreateFormType;
 use App\Repository\LieuRepository;
 use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
 use App\Repository\VilleRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,16 +33,52 @@ class SortieController extends AbstractController
         ]);
     }
 
+
     #[Route('/create', name: '_create')]
-    public function create(Request $request, VilleRepository $villeRepository): Response
-    {
+    public function create(Request $request, VilleRepository $villeRepository, Security $security, EntityManagerInterface $entityManager): Response {
+        $user = $security->getUser();
         $form = $this->createForm(SortieCreateFormType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $formData = $form->getData();
+
+            $etat = $entityManager->getRepository(Etat::class)->find(29);
+            if (!$etat) {
+                throw $this->createNotFoundException('Default Etat not found');
+            }
+
+            $lieu = $formData->getLieu();
+
+            $sortie = new Sortie();
+            $sortie->setNom($formData->getNom());
+            $sortie->setDateHeureDebut($formData->getDateHeureDebut());
+            $sortie->setDateLimiteInscription($formData->getDateLimiteInscription());
+            $sortie->setNbInscriptionsMax($formData->getNbInscriptionsMax());
+            $sortie->setDuree($formData->getDuree());
+            $sortie->setInfosSortie($formData->getInfosSortie());
+            $sortie->setCampus($formData->getCampus());
+            $sortie->setLieu($lieu);
+            $sortie->setParticipantOrganisateur($user);
+            $sortie->setEtat($etat);
+
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_main');
+        }
 
         return $this->render('sortie/create.html.twig', [
             'form' => $form->createView(),
-            'villes' => $villeRepository->findAll(), // Fetch all Ville options
+            'villes' => $villeRepository->findAll(),
+            'organiseur_default' => $user->getId(),
         ]);
     }
+
+
+
+
+
 
     #[Route('/get-lieux-for-ville/{villeId}', name: 'get_lieux_for_ville')]
     public function getLieuxForVille(int $villeId, LieuRepository $lieuRepository): JsonResponse

@@ -1,7 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+
     <form id="sortie-form" action="{{ path('app_sortie_create') }}" method="post">
+        {{ form_errors(form) }}
         {{ form_start(form) }}
         <div class="form-group">
             {{ form_label(form.nom) }}
@@ -18,30 +20,21 @@
             {{ form_widget(form.infosSortie) }}
             {{ form_label(form.campus) }}
             {{ form_widget(form.campus) }}
-        </div>
-        <div class="form-group">
             {{ form_label(form.ville) }}
             {{ form_widget(form.ville, {'attr': {'class': 'ville-select'}}) }}
-        </div>
-        <div class="form-group">
             {{ form_label(form.lieu) }}
             {{ form_widget(form.lieu, {'attr': {'class': 'lieu-select'}}) }}
-        </div>
-        <div class="form-group">
-            {{ form_label(form.rue) }}
-            {{ form_widget(form.rue, {'attr': {'class': 'rue-select'}}) }}
-        </div>
-        <div class="form-group">
-            {{ form_label(form.codePostal) }}
-            {{ form_widget(form.codePostal, {'attr': {'class': 'codePostal-select'}}) }}
-        </div>
-        <div class="form-group">
-            {{ form_label(form.latitude) }}
-            {{ form_widget(form.latitude, {'attr': {'class': 'latitude-select'}}) }}
-        </div>
-        <div class="form-group">
-            {{ form_label(form.longitude) }}
-            {{ form_widget(form.longitude, {'attr': {'class': 'latitude-select'}}) }}
+
+                <label for="codePostal" class="control-label">Code Postal:</label>
+                <input type="text" id="codePostal" name="codePostal" class="codePostal-select" readonly>
+                <label for="rue" class="control-label">Rue:</label>
+                <input type="text" id="rue" name="rue" class="rue-select" readonly>
+                <label for="latitude" class="control-label">Latitude:</label>
+                <input type="text" id="latitude" name="latitude" class="latitude-select" readonly>
+                <label for="longitude" class="control-label">Longitude:</label>
+                <input type="text" id="longitude" name="longitude" class="longitude-select" readonly>
+
+            {{ form_widget(form.participantOrganisateur, {'attr': {'value': organiseur_default}}) }}
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
         {{ form_end(form) }}
@@ -65,7 +58,6 @@
                             lieuSelect.append($('<option></option>').attr('value', id).text(name));
                         });
 
-                        // Trigger 'change' event for the lieu-select field after populating it
                         lieuSelect.change();
                     },
                     error: function(xhr, status, error) {
@@ -94,7 +86,7 @@
                     url: '/sortie/get-rue-for-lieu/' + lieuId,
                     success: function(data) {
                         var rueSelect = $('.rue-select');
-                        rueSelect.val(data); // Set the received string directly as the 'rue' value
+                        rueSelect.val(data);
                     },
                     error: function(xhr, status, error) {
                         console.error(error);
@@ -105,7 +97,7 @@
                     url: '/sortie/get-latitude-for-lieu/' + lieuId,
                     success: function(data) {
                         var latitudeSelect = $('.latitude-select');
-                        latitudeSelect.val(data); // Set the received string directly as the 'rue' value
+                        latitudeSelect.val(data);
                     },
                     error: function(xhr, status, error) {
                         console.error(error);
@@ -116,7 +108,7 @@
                     url: '/sortie/get-longitude-for-lieu/' + lieuId,
                     success: function(data) {
                         var longitudeSelect = $('.longitude-select');
-                        longitudeSelect.val(data); // Set the received string directly as the 'rue' value
+                        longitudeSelect.val(data);
                     },
                     error: function(xhr, status, error) {
                         console.error(error);
@@ -124,7 +116,6 @@
                 });
             });
 
-            // Trigger initial 'ville-select' change event on page load if pre-selected
             $('.ville-select').change();
         });
     </script>
