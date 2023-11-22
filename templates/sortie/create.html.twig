@@ -1,10 +1,131 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-<h2>Create Sortie</h2>
-{% endblock %}
-
 {% block body %}
-
+    <form id="sortie-form" action="{{ path('app_sortie_create') }}" method="post">
+        {{ form_start(form) }}
+        <div class="form-group">
+            {{ form_label(form.nom) }}
+            {{ form_widget(form.nom) }}
+            {{ form_label(form.dateHeureDebut) }}
+            {{ form_widget(form.dateHeureDebut) }}
+            {{ form_label(form.dateLimiteInscription) }}
+            {{ form_widget(form.dateLimiteInscription) }}
+            {{ form_label(form.nbInscriptionsMax) }}
+            {{ form_widget(form.nbInscriptionsMax) }}
+            {{ form_label(form.duree) }}
+            {{ form_widget(form.duree) }}
+            {{ form_label(form.infosSortie) }}
+            {{ form_widget(form.infosSortie) }}
+            {{ form_label(form.campus) }}
+            {{ form_widget(form.campus) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.ville) }}
+            {{ form_widget(form.ville, {'attr': {'class': 'ville-select'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.lieu) }}
+            {{ form_widget(form.lieu, {'attr': {'class': 'lieu-select'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.rue) }}
+            {{ form_widget(form.rue, {'attr': {'class': 'rue-select'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.codePostal) }}
+            {{ form_widget(form.codePostal, {'attr': {'class': 'codePostal-select'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.latitude) }}
+            {{ form_widget(form.latitude, {'attr': {'class': 'latitude-select'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.longitude) }}
+            {{ form_widget(form.longitude, {'attr': {'class': 'latitude-select'}}) }}
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        {{ form_end(form) }}
+    </form>
 {% endblock %}
 
+{% block javascripts %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.ville-select').change(function() {
+                var villeId = $(this).val();
+
+                $.ajax({
+                    type: 'GET',
+                    url: '/sortie/get-lieux-for-ville/' + villeId,
+                    success: function(data) {
+                        var lieuSelect = $('.lieu-select');
+                        lieuSelect.empty();
+                        $.each(data, function(id, name) {
+                            lieuSelect.append($('<option></option>').attr('value', id).text(name));
+                        });
+
+                        // Trigger 'change' event for the lieu-select field after populating it
+                        lieuSelect.change();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+
+                $.ajax({
+                    type: 'GET',
+                    url: '/sortie/get-codePostal-for-ville/' + villeId,
+                    success: function(data) {
+                        var codePostalSelect = $('.codePostal-select');
+                        codePostalSelect.val(data);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            });
+
+            $('.lieu-select').change(function() {
+                var lieuId = $(this).val();
+
+                $.ajax({
+                    type: 'GET',
+                    url: '/sortie/get-rue-for-lieu/' + lieuId,
+                    success: function(data) {
+                        var rueSelect = $('.rue-select');
+                        rueSelect.val(data); // Set the received string directly as the 'rue' value
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+                $.ajax({
+                    type: 'GET',
+                    url: '/sortie/get-latitude-for-lieu/' + lieuId,
+                    success: function(data) {
+                        var latitudeSelect = $('.latitude-select');
+                        latitudeSelect.val(data); // Set the received string directly as the 'rue' value
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+                $.ajax({
+                    type: 'GET',
+                    url: '/sortie/get-longitude-for-lieu/' + lieuId,
+                    success: function(data) {
+                        var longitudeSelect = $('.longitude-select');
+                        longitudeSelect.val(data); // Set the received string directly as the 'rue' value
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            });
+
+            // Trigger initial 'ville-select' change event on page load if pre-selected
+            $('.ville-select').change();
+        });
+    </script>
+{% endblock %}
