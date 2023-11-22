@@ -5,3 +5,11 @@ controllers:
 kernel:
     resource: ../src/Kernel.php
     type: annotation
+
+app_sortie_inscrit:
+    path: /sortie/inscrit/{id}
+    controller: App\Controller\SortieController::inscrit
+
+app_sortie_desist:
+    path: /sortie/desist/{id}
+    controller: App\Controller\SortieController::desist

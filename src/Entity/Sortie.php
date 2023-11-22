@@ -147,6 +147,18 @@ class Sortie
         return $this;
     }
 
+    public function getVille(): ?Ville
+    {
+        return $this->lieu ? $this->lieu->getVille() : null;
+    }
+
+    public function setVille(?Ville $ville): ?Ville
+    {
+        // Assuming getLieu() returns an instance of Lieu entity with associated Ville
+        return $this->getLieu() ? $this->getLieu()->getVille() : null;
+    }
+
+
     public function getEtat(): ?Etat
     {
         return $this->etat;
