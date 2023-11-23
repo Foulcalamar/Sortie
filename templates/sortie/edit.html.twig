@@ -2,7 +2,7 @@
 
 {% block body %}
 
-    <form id="sortie-form" action="{{ path('app_sortie_create') }}" method="post">
+    <form id="sortie-form" action="{{ path('app_sortie_edit', {'id': sortie.id}) }}" method="post">
         {{ form_errors(form) }}
         {{ form_start(form) }}
         <div class="form-group">
@@ -21,26 +21,30 @@
             {{ form_widget(form.infosSortie) }}
             {{ form_label(form.campus) }}
             {{ form_widget(form.campus) }}
-            {{ form_label(form.ville) }}
-            {{ form_widget(form.ville, {'attr': {'class': 'ville-select'}}) }}
+            <!-- Locked Ville field (hidden) -->
+            {{ form_widget(form.ville, {'attr': {'class': 'ville-select', 'readonly': 'readonly', 'disabled': 'disabled'}}) }}
             {{ form_label(form.lieu) }}
             {{ form_widget(form.lieu, {'attr': {'class': 'lieu-select'}}) }}
 
-                <label for="codePostal" class="control-label">Code Postal:</label>
-                <input type="text" id="codePostal" name="codePostal" class="codePostal-select" readonly>
-                <label for="rue" class="control-label">Rue:</label>
-                <input type="text" id="rue" name="rue" class="rue-select" readonly>
-                <label for="latitude" class="control-label">Latitude:</label>
-                <input type="text" id="latitude" name="latitude" class="latitude-select" readonly>
-                <label for="longitude" class="control-label">Longitude:</label>
-                <input type="text" id="longitude" name="longitude" class="longitude-select" readonly>
+            <label for="codePostal" class="control-label">Code Postal:</label>
+            <input type="text" id="codePostal" name="codePostal" class="codePostal-select" readonly>
+            <label for="rue" class="control-label">Rue:</label>
+            <input type="text" id="rue" name="rue" class="rue-select" readonly>
+            <label for="latitude" class="control-label">Latitude:</label>
+            <input type="text" id="latitude" name="latitude" class="latitude-select" readonly>
+            <label for="longitude" class="control-label">Longitude:</label>
+            <input type="text" id="longitude" name="longitude" class="longitude-select" readonly>
 
             {{ form_widget(form.participantOrganisateur, {'attr': {'value': organiseur_default}}) }}
         </div>
-        <button type="submit" name="draft" class="btn btn-secondary">Save as Draft</button>
-        <button type="submit" name="publish" class="btn btn-primary">Publish</button>
+
+        <button type="submit" name="modifier" class="btn btn-secondary">Modify</button>
+        <button type="submit" name="publier" class="btn btn-secondary">Publier</button>
+        <button type="submit" name="annuler" class="btn btn-secondary">Annuler Sortie</button>
         {{ form_end(form) }}
     </form>
+    <a href="{{ path('app_sortie_details', {'id': sortie.id}) }}" class="btn btn-secondary">Cancel</a>
+
 {% endblock %}
 
 {% block javascripts %}

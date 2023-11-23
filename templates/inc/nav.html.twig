@@ -9,6 +9,7 @@
             {% if is_granted('ROLE_ADMIN') %}
                 <li><a href="{{ path('app_register') }}" title="Create account">Create account</a></li>
             {% endif %}
+            <li><a href="{{ path('app_sortie_create') }}" title="Create Sortie">Create Sortie</a></li>
             <li><a href="{{ path('app_logout') }}" title="Logout">Logout</a></li>
 
         {% else %}

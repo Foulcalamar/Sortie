@@ -10,10 +10,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RegistrationController extends AbstractController
 {
+
+
     #[Route('/admin/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
@@ -32,9 +33,20 @@ class RegistrationController extends AbstractController
 
             $entityManager->persist($user);
             $entityManager->flush();
-            // do anything else you need here, like send an email
 
-            return $this->redirectToRoute('_profiler_home');
+            $this->addFlash('success', 'Utilisateur enregistré avec succès!');
+            $this->addFlash('email', $form->get('email')->getData());
+            $this->addFlash('pseudo', $form->get('pseudo')->getData());
+            $this->addFlash('plainPassword', $form->get('plainPassword')->getData());
+            $this->addFlash('nom', $form->get('nom')->getData());
+            $this->addFlash('prenom', $form->get('prenom')->getData());
+            $this->addFlash('campus', $form->get('campus')->getData());
+            $this->addFlash('telephone', $form->get('telephone')->getData());
+            $this->addFlash('actif', $form->get('actif')->getData());
+            $this->addFlash('administrateur', $form->get('administrateur')->getData());
+
+
+            return $this->redirectToRoute('app_register');
         }
 
         return $this->render('registration/register.html.twig', [
