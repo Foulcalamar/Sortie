@@ -3,7 +3,7 @@
 namespace App\Data;
 
 use App\Entity\Campus;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
+use DateTimeInterface;
 
 class SortieRecherche
 {
@@ -11,9 +11,9 @@ class SortieRecherche
 
     public ?string $cle;
 
-    public ?DateType $dateFrom;
+    public ?DateTimeInterface $dateFrom;
 
-    public ?DateType $dateTo;
+    public ?DateTimeInterface $dateTo;
 
     public ?bool $organisateurRecherche;
 
