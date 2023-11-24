@@ -3,6 +3,14 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
+
+    <div>
+        {{ form_start(sortieForm)}}
+        {{ form_widget(sortieForm) }}
+        <button>Recherche!</button>
+        {{ form_end(sortieForm)}}
+    </div>
+
     <table style="border-collapse: collapse; border: 1px solid black;">
         <thead>
         <tr>

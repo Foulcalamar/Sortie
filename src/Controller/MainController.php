@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Data\SortieRecherche;
 use App\Entity\Etat;
 use App\Entity\Participant;
 use App\Entity\Sortie;
+use App\Form\SortieRechercheForm;
 use App\Repository\EtatRepository;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -36,10 +38,15 @@ class MainController extends AbstractController
 
         $entityManager->flush();
 
-        $sorties = $sortieRepository->findAll();
+        $recherche = new SortieRecherche();
+        $sortieRechercheForm = $this->createForm(SortieRechercheForm::class, $recherche);
+        $sortieRechercheForm->handleRequest($request);
+
+        $sorties = $sortieRepository->rechercheSorties($recherche);
 
         return $this->render('main/index.html.twig', [
             'sorties' => $sorties,
+            'sortieForm' => $sortieRechercheForm->createView(),
         ]);
     }
 
