@@ -37,9 +37,21 @@ class ParticipantController extends AbstractController
     }
 
     #[Route('/edit/{id<\d+>}', name: '_edit')]
-    public function edit(int $id, Request $request, ParticipantRepository $participantRepository, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
-    {
+    public function edit(
+        int $id,
+        Security $security,
+        Request $request,
+        ParticipantRepository $participantRepository,
+        UserPasswordHasherInterface $userPasswordHasher,
+        EntityManagerInterface $entityManager
+    ): Response {
         $user = $participantRepository->find($id);
+
+        // Check if the logged-in user has the ROLE_ADMIN or is editing their own profile
+        if (!$security->isGranted('ROLE_ADMIN') && $security->getUser()->getId() !== $user->getId()) {
+            return $this->redirectToRoute('app_main');
+        }
+
         $form = $this->createForm(UpdateUserFormType::class, $user);
         $form->handleRequest($request);
 
@@ -62,4 +74,5 @@ class ParticipantController extends AbstractController
             'updateUserForm' => $form->createView(),
         ]);
     }
+
 }

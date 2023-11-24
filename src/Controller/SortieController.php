@@ -48,6 +48,10 @@ class SortieController extends AbstractController
         $form = $this->createForm(SortieCreateFormType::class, $sortie);
         $form->handleRequest($request);
 
+        if ($user !== $sortie->getParticipantOrganisateur() && !$security->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_main');
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
             // Update the existing Sortie entity with the form data
             $sortie = $form->getData();
@@ -96,7 +100,9 @@ class SortieController extends AbstractController
             return $this->redirectToRoute('app_main'); //If Already Registered
         }
 
-        $sortie->addParticipantsInscrit($user);
+        if (!empty($user)) {
+            $sortie->addParticipantsInscrit($user);
+        }
         $entityManager->flush();
 
         return $this->redirectToRoute('app_main');
