@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <h2 class="title-create">Creer une sortie</h2>
 
     <form id="sortie-form" action="{{ path('app_sortie_create') }}" method="post">
         {{ form_errors(form) }}
@@ -37,8 +38,10 @@
 
             {{ form_widget(form.participantOrganisateur, {'attr': {'value': organiseur_default}}) }}
         </div>
+        <div class="btn-create">
         <button type="submit" name="draft" class="btn btn-secondary">Save as Draft</button>
         <button type="submit" name="publish" class="btn btn-primary">Publish</button>
+        </div>
         {{ form_end(form) }}
     </form>
 {% endblock %}

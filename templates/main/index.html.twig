@@ -60,7 +60,7 @@
                         {% endif %}
 
                         {% if app.user not in sortie.participantsInscrits and sortie.etat.id == 31%}
-                            <a href="{{ path('app_sortie_inscrit', {'id': sortie.id}) }}">| S'inscrire</a>
+                            | <a href="{{ path('app_sortie_inscrit', {'id': sortie.id}) }}">S'inscrire</a>
                         {% endif %}
                     </td>
                 </tr>
@@ -69,4 +69,3 @@
         </tbody>
     </table>
 {% endblock %}
-

@@ -1,0 +1,114 @@
+header {
+    background-color: #e9edc9;
+}
+
+body {
+    background-color: #fefae0;
+    background-image: ;c
+}
+
+.sortie {
+    outline: none;
+    text-decoration: none;
+    color: #d4a373;
+    font-style: italic;
+    font-weight: bold;
+}
+
+.nav-list {
+    width: 100%;
+    display: flex;
+    justify-content: right;
+}
+
+.nav-list li {
+    list-style: none;
+    padding: 10px;
+}
+
+.nav-list li a {
+    color: #d4a373;
+}
+
+h1 {
+    color: darkolivegreen;
+}
+
+.title-profile {
+    color: darkolivegreen;
+    align-items: center;
+    text-align: center;
+}
+
+.title-create {
+    align-items: center;
+    text-align: center;
+    color: darkolivegreen;
+}
+
+table {
+    margin: auto;
+    width: 100%;
+}
+
+.profile {
+    align-items: center;
+    text-align: center;
+    width: 20%;
+    margin: 0 auto;
+}
+
+.profile-edit {
+    align-items: center;
+    text-align: center;
+    width: 40%;
+    margin: 0 auto;
+}
+
+.register {
+    align-items: center;
+    text-align: center;
+    width: 35%;
+    margin: 0 auto;
+}
+
+.btn-create {
+    align-items: center;
+    text-align: center;
+}
+
+.form-group {
+    columns: 2;
+    width: 80%;
+    margin: 0 auto;
+}
+
+label {
+    min-width: 50%;
+    display: inline-block;
+    margin-bottom: 4px;
+    text-align: left;
+}
+
+input {
+    border-radius: 10px;
+}
+
+button {
+    border-radius: 10px;
+}
+
+.btn:hover {
+    background-color: #faedcd;
+    color: rgba(128, 179, 114, 0.84);
+}
+
+.btn {
+    background-color: #d4a373;
+    color: white;
+}
+
+.btn-primary {
+    border-style: none;
+    margin: 2px;
+}

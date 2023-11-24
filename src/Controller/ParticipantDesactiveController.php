@@ -11,6 +11,7 @@ class ParticipantDesactiveController extends AbstractController
     #[Route('/participant-desactive', name: 'app_participant_desactive')]
     public function index(): Response
     {
+
         return $this->render('participant_desactive/index.html.twig', [
             'controller_name' => 'ParticipantDesactiveController',
         ]);

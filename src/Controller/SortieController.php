@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Etat;
-use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Form\SortieCreateFormType;
 use App\Repository\LieuRepository;
@@ -38,7 +37,6 @@ class SortieController extends AbstractController
         int $id,
         Security $security,
         VilleRepository $villeRepository,
-        ParticipantRepository $participantRepository,
         SortieRepository $sortieRepository,
         Request $request,
         EntityManagerInterface $entityManager
@@ -49,6 +47,10 @@ class SortieController extends AbstractController
         // Create the form with the SortieCreateFormType and populate it with the Sortie entity's data
         $form = $this->createForm(SortieCreateFormType::class, $sortie);
         $form->handleRequest($request);
+
+        if ($user !== $sortie->getParticipantOrganisateur() && !$security->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_main');
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Update the existing Sortie entity with the form data
@@ -94,19 +96,15 @@ class SortieController extends AbstractController
             throw $this->createNotFoundException('Sortie not found');
         }
 
-        // Check if the user is already registered for the sortie
         if ($sortie->getParticipantsInscrits()->contains($user)) {
-            // Redirect or show a message indicating the user is already registered
-            return $this->redirectToRoute('app_main');
+            return $this->redirectToRoute('app_main'); //If Already Registered
         }
 
-        // If the user is not registered, add the user to the sortie
-        $sortie->addParticipantsInscrit($user);
-
-        // Persist changes
+        if (!empty($user)) {
+            $sortie->addParticipantsInscrit($user);
+        }
         $entityManager->flush();
 
-        // Redirect or show a success message
         return $this->redirectToRoute('app_main');
     }
 
@@ -124,20 +122,15 @@ class SortieController extends AbstractController
             throw $this->createNotFoundException('Sortie not found');
         }
 
-        // Check if the user is registered for the sortie
         if ($sortie->getParticipantsInscrits()->contains($user)) {
-            // Remove the user from the sortie
-            $sortie->removeParticipantsInscrit($user);
 
-            // Persist changes
+            $sortie->removeParticipantsInscrit($user); //If Already Registered
             $entityManager->flush();
 
-            // Redirect or show a success message
             return $this->redirectToRoute('app_main');
         }
 
-        // Redirect or show a message indicating the user is not registered
-        return $this->redirectToRoute('error_route');
+        return $this->redirectToRoute('app_main');
     }
 
 
