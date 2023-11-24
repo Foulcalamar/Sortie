@@ -4,6 +4,7 @@ header {
 
 body {
     background-color: #fefae0;
+    background-image: ;c
 }
 
 .sortie {
@@ -23,12 +24,26 @@ body {
 .nav-list li {
     list-style: none;
     padding: 10px;
+}
+
+.nav-list li a {
     color: #d4a373;
 }
 
+h1 {
+    color: darkolivegreen;
+}
+
 .title-profile {
+    color: darkolivegreen;
     align-items: center;
     text-align: center;
+}
+
+.title-create {
+    align-items: center;
+    text-align: center;
+    color: darkolivegreen;
 }
 
 table {
