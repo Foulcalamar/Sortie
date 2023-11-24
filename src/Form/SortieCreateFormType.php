@@ -18,7 +18,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SortieCreateFormType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $organiseurDefaultValue = $options['organiseur_default'] ?? null;
 
@@ -55,12 +55,12 @@ class SortieCreateFormType extends AbstractType
             ->add('participantOrganisateur', HiddenType::class, [
                 'data' => $organiseurDefaultValue,
                 'mapped' => false,
-            ]);;
+            ]);
 
 
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Sortie::class,

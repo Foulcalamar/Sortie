@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Participant;
 use App\Form\UpdateUserFormType;
 use App\Repository\ParticipantRepository;
 use Doctrine\ORM\EntityManagerInterface;

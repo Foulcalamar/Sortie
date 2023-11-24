@@ -3,13 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Etat;
-use App\Entity\Participant;
-use App\Entity\Sortie;
 use App\Repository\EtatRepository;
 use App\Repository\SortieRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,9 +15,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class MainController extends AbstractController
 {
     #[Route('/', name: 'app_main')]
-    public function index(Request $request, SortieRepository $sortieRepository, EntityManagerInterface $entityManager, EtatRepository $etatRepository, Security $security): Response {
+    public function index(SortieRepository $sortieRepository, EntityManagerInterface $entityManager, EtatRepository $etatRepository, Security $security): Response {
 
-        $currentTime = new \DateTime();
+        $currentTime = new DateTime();
 
         $enCoursEtat = $etatRepository->find(33);
         $passeeEtat = $etatRepository->find(34);
@@ -43,11 +41,9 @@ class MainController extends AbstractController
         ]);
     }
 
-    private function updateSortieEtat($sortie, $security, \DateTime $currentTime, ?Etat $enCoursEtat, ?Etat $passeeEtat, ?Etat $ouvertEtat, ?Etat $clotureEtat, ?Etat $draftEtat, ?Etat $fermerEtat, ?Etat $annuleEtat): void
+    private function updateSortieEtat($sortie, $security, DateTime $currentTime, ?Etat $enCoursEtat, ?Etat $passeeEtat, ?Etat $ouvertEtat, ?Etat $clotureEtat, ?Etat $draftEtat, ?Etat $fermerEtat, ?Etat $annuleEtat): void
     {
-        $loggedInUser = $security->getUser();
-        $loggedInUserId = ($loggedInUser !== null) ? $loggedInUser->getUserIdentifier() : null;
-        $organiseur = $sortie->getParticipantOrganisateur();
+        $security->getUser();
 
         $dateHeureDebut = $sortie->getDateHeureDebut();
         $dateFermeInscription = $sortie->getDateLimiteInscription();
