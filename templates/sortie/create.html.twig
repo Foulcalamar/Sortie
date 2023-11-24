@@ -37,8 +37,10 @@
 
             {{ form_widget(form.participantOrganisateur, {'attr': {'value': organiseur_default}}) }}
         </div>
+        <div class="btn-create">
         <button type="submit" name="draft" class="btn btn-secondary">Save as Draft</button>
         <button type="submit" name="publish" class="btn btn-primary">Publish</button>
+        </div>
         {{ form_end(form) }}
     </form>
 {% endblock %}
