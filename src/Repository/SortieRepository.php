@@ -37,12 +37,12 @@ class SortieRepository extends ServiceEntityRepository
         }
 
         if (!empty($data->dateFrom)) {
-            $qb->andWhere('s.dateDebut >= :dateFrom')
+            $qb->andWhere('s.dateHeureDebut >= :dateFrom')
                 ->setParameter('dateFrom', $data->dateFrom);
         }
 
         if (!empty($data->dateTo)) {
-            $qb->andWhere('s.dateDebut <= :dateTo')
+            $qb->andWhere('s.dateHeureDebut <= :dateTo')
                 ->setParameter('dateTo', $data->dateTo);
         }
 
