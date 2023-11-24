@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <h2 class="title-create">Creer une sortie</h2>
 
     <form id="sortie-form" action="{{ path('app_sortie_create') }}" method="post">
         {{ form_errors(form) }}
