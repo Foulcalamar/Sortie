@@ -3,7 +3,8 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+    <h1 class="title-profile">Register</h1>
+    <div class="register">
 
     {{ form_errors(registrationForm) }}
 
@@ -29,6 +30,7 @@
     }) }}
 
     <button type="submit" class="btn">Register</button>
+    </div>
     {{ form_end(registrationForm) }}
     <br>
     {% for label, messages in app.flashes %}

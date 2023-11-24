@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <div class="profile">
     <h2>{{ participant.pseudo }}</h2>
     <div>Prenom : {{ participant.prenom }}</div>
     <div>Nom : {{ participant.nom }}</div>
@@ -16,6 +17,7 @@
     <a href="{{ path('app_participant_edit', {'id': participant.id}) }}" class="btn btn-primary">
         Modifier
     </a>
+    </div>
 {% endblock %}
 
 {% block title %}
