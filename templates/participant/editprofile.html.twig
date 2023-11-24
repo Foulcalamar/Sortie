@@ -5,8 +5,9 @@ Modify Profile
 {% endblock %}
 
 {% block body %}
-    <h2>Edit your profile</h2>
 
+    <h2 class="title-profile">Edit your profile</h2>
+    <div class="profile-edit">
     {{ form_errors(updateUserForm) }}
 
     {{ form_start(updateUserForm) }}
@@ -21,6 +22,6 @@ Modify Profile
                 Annuler
             </a>
         </div>
-
+</div>
 {% endblock %}
 
