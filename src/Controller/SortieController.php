@@ -53,12 +53,10 @@ class SortieController extends AbstractController
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Update the existing Sortie entity with the form data
             $sortie = $form->getData();
 
             $etat = $entityManager->getRepository(Etat::class);
 
-            // Update the participant organisateur (if needed)
             $sortie->setParticipantOrganisateur($user);
 
             if ($request->request->has('modifier')) {
