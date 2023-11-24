@@ -21,6 +21,50 @@ class SortieRepository extends ServiceEntityRepository
         parent::__construct($registry, Sortie::class);
     }
 
+    public function rechercheSorties($data)
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->join('s.campus', 'c');
+
+        if (!empty($data->campus)) {
+            $qb->andWhere('c.id = :campus')
+                ->setParameter('campus', $data->campus);
+        }
+
+        if (!empty($data->cle)) {
+            $qb->andWhere('s.nom LIKE :cle')
+                ->setParameter('cle', "%{$data->cle}%");
+        }
+
+        if (!empty($data->dateFrom)) {
+            $qb->andWhere('s.dateDebut >= :dateFrom')
+                ->setParameter('dateFrom', $data->dateFrom);
+        }
+
+        if (!empty($data->dateTo)) {
+            $qb->andWhere('s.dateDebut <= :dateTo')
+                ->setParameter('dateTo', $data->dateTo);
+        }
+
+        if (!empty($data->organisateurRecherche)) {
+            $qb->andWhere('s.organisateur = :organisateur');
+        }
+
+        if (!empty($data->inscritsRecherche)) {
+            $qb->andWhere('s.participants IN (:inscrits)');
+        }
+
+        if (!empty($data->noninscritsRecherche)) {
+            $qb->andWhere('s.participants NOT IN (:inscrits)');
+        }
+
+        if (!empty($data->pasee)) {
+            $qb->andWhere('s.etat = :Pasée');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return Sortie[] Returns an array of Sortie objects
 //     */
