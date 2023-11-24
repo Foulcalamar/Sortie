@@ -17,9 +17,9 @@ class ResetPasswordRequest implements ResetPasswordRequestInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'resetsDemandes')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Participant $user = null;
+    private ?Participant $participantDemandeurDeReset = null;
 
     public function __construct(object $user, \DateTimeInterface $expiresAt, string $selector, string $hashedToken)
     {

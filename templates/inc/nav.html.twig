@@ -7,7 +7,9 @@
             <li><a href="{{ path('app_participant_profile', {'id': app.user.id }) }}" title="Profile">My Profile
                     ({{ app.user.prenom }})</a></li>
             {% if is_granted('ROLE_ADMIN') %}
-                <li><a href="{{ path('app_register') }}" title="Create account">Create account</a></li>
+                <li><a href="{{ path('app_register') }}" title="Сréer un utilisateur">Сréer un utilisateur</a></li>
+                <li><a href="{{ path('app_desactiver_supprimer_participants') }}" title="Désactiver/Supprimer un
+                utilisateur">Désactiver/Supprimer un utilisateur</a></li>
             {% endif %}
             <li><a href="{{ path('app_sortie_create') }}" title="Create Sortie">Create Sortie</a></li>
             <li><a href="{{ path('app_logout') }}" title="Logout">Logout</a></li>

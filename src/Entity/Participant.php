@@ -51,11 +51,15 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(nullable: false)]
     private ?Campus $campus = null;
 
-    #[ORM\OneToMany(mappedBy: 'participantOrganisateur', targetEntity: Sortie::class)]
+    #[ORM\OneToMany(mappedBy: 'participantOrganisateur', targetEntity: Sortie::class, orphanRemoval: true)]
     private Collection $sortiesOrganisee;
 
     #[ORM\ManyToMany(targetEntity: Sortie::class, inversedBy: 'participantsInscrits')]
     private Collection $sortiesInscrites;
+
+    #[ORM\OneToMany(mappedBy: 'participantDemandeurDeReset', targetEntity: ResetPasswordRequest::class, orphanRemoval: true)]
+    private Collection $resetsDemandes;
+
 
     public function __construct()
     {
