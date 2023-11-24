@@ -2,12 +2,17 @@
 
 namespace App\Controller;
 
+use App\Data\SortieRecherche;
 use App\Entity\Etat;
+use App\Entity\Participant;
+use App\Entity\Sortie;
+use App\Form\SortieRechercheForm;
 use App\Repository\EtatRepository;
 use App\Repository\SortieRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,7 +20,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class MainController extends AbstractController
 {
     #[Route('/', name: 'app_main')]
-    public function index(SortieRepository $sortieRepository, EntityManagerInterface $entityManager, EtatRepository $etatRepository, Security $security): Response {
+    public function index(Request $request, SortieRepository $sortieRepository, EntityManagerInterface $entityManager,
+                          EtatRepository $etatRepository, Security $security): Response {
 
         $currentTime = new DateTime();
 
@@ -34,10 +40,15 @@ class MainController extends AbstractController
 
         $entityManager->flush();
 
-        $sorties = $sortieRepository->findAll();
+        $recherche = new SortieRecherche();
+        $sortieRechercheForm = $this->createForm(SortieRechercheForm::class, $recherche);
+        $sortieRechercheForm->handleRequest($request);
+
+        $sorties = $sortieRepository->rechercheSorties($recherche);
 
         return $this->render('main/index.html.twig', [
             'sorties' => $sorties,
+            'sortieForm' => $sortieRechercheForm->createView(),
         ]);
     }
 
