@@ -50,76 +50,80 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('.ville-select').change(function() {
-                var villeId = $(this).val();
+            $('.lieu-select').prop('disabled', true);
 
-                $.ajax({
-                    type: 'GET',
-                    url: '/sortie/get-lieux-for-ville/' + villeId,
-                    success: function(data) {
-                        var lieuSelect = $('.lieu-select');
-                        lieuSelect.empty();
-                        $.each(data, function(id, name) {
-                            lieuSelect.append($('<option></option>').attr('value', id).text(name));
-                        });
+                $('.ville-select').change(function() {
+                    var villeId = $(this).val();
+                    $('.lieu-select').prop('disabled', villeId === '');
 
-                        lieuSelect.change();
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(error);
-                    }
+
+                    $.ajax({
+                        type: 'GET',
+                        url: '/sortie/get-lieux-for-ville/' + villeId,
+                        success: function(data) {
+                            var lieuSelect = $('.lieu-select');
+                            lieuSelect.empty();
+                            $.each(data, function(id, name) {
+                                lieuSelect.append($('<option></option>').attr('value', id).text(name));
+                            });
+
+                            lieuSelect.change();
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(error);
+                        }
+                    });
+
+                    $.ajax({
+                        type: 'GET',
+                        url: '/sortie/get-codePostal-for-ville/' + villeId,
+                        success: function(data) {
+                            var codePostalSelect = $('.codePostal-select');
+                            codePostalSelect.val(data);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(error);
+                        }
+                    });
                 });
 
-                $.ajax({
-                    type: 'GET',
-                    url: '/sortie/get-codePostal-for-ville/' + villeId,
-                    success: function(data) {
-                        var codePostalSelect = $('.codePostal-select');
-                        codePostalSelect.val(data);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(error);
-                    }
-                });
-            });
+                $('.lieu-select').change(function() {
+                    var lieuId = $(this).val();
 
-            $('.lieu-select').change(function() {
-                var lieuId = $(this).val();
-
-                $.ajax({
-                    type: 'GET',
-                    url: '/sortie/get-rue-for-lieu/' + lieuId,
-                    success: function(data) {
-                        var rueSelect = $('.rue-select');
-                        rueSelect.val(data);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(error);
-                    }
+                    $.ajax({
+                        type: 'GET',
+                        url: '/sortie/get-rue-for-lieu/' + lieuId,
+                        success: function(data) {
+                            var rueSelect = $('.rue-select');
+                            rueSelect.val(data);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(error);
+                        }
+                    });
+                    $.ajax({
+                        type: 'GET',
+                        url: '/sortie/get-latitude-for-lieu/' + lieuId,
+                        success: function(data) {
+                            var latitudeSelect = $('.latitude-select');
+                            latitudeSelect.val(data);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(error);
+                        }
+                    });
+                    $.ajax({
+                        type: 'GET',
+                        url: '/sortie/get-longitude-for-lieu/' + lieuId,
+                        success: function(data) {
+                            var longitudeSelect = $('.longitude-select');
+                            longitudeSelect.val(data);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(error);
+                        }
+                    });
                 });
-                $.ajax({
-                    type: 'GET',
-                    url: '/sortie/get-latitude-for-lieu/' + lieuId,
-                    success: function(data) {
-                        var latitudeSelect = $('.latitude-select');
-                        latitudeSelect.val(data);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(error);
-                    }
-                });
-                $.ajax({
-                    type: 'GET',
-                    url: '/sortie/get-longitude-for-lieu/' + lieuId,
-                    success: function(data) {
-                        var longitudeSelect = $('.longitude-select');
-                        longitudeSelect.val(data);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(error);
-                    }
-                });
-            });
 
             $('.ville-select').change();
         });
